@@ -120,71 +120,71 @@ final class FreeformResizer extends Resizer {
 
     bool isBound = false;
     // Apply size constraints if they are set.
-    // if (!constraints.isUnconstrained) {
-    //   // Clamp the current width and height to within allowed limits.
-    //   final Dimension constrainedSize = Dimension(
-    //     newRect.width.clamp(constraints.minWidth, constraints.maxWidth),
-    //     newRect.height.clamp(constraints.minHeight, constraints.maxHeight),
-    //   );
-    //
-    //   // Calculate how much adjustment is needed to reach the constrained size.
-    //   final Dimension constrainedDelta = Dimension(
-    //     constrainedSize.width - newRect.width,
-    //     constrainedSize.height - newRect.height,
-    //   );
-    //
-    //   // Recalculate the rectangle using the flipped handle's anchor.
-    //   newRect = Box.fromHandle(
-    //     flippedHandle.anchor(effectiveInitialRect),
-    //     flippedHandle,
-    //     newRect.width + constrainedDelta.width,
-    //     newRect.height + constrainedDelta.height,
-    //   );
-    //
-    //   // Reposition again after applying constraints.
-    //   newRect = repositionRotatedResizedBox(
-    //     newRect: newRect,
-    //     initialRect: initialRect,
-    //     rotation: rotation,
-    //   );
-    //
-    //   // Update the bounding rectangle to reflect the constrained, repositioned rect.
-    //   newBoundingRect = BoxTransformer.calculateBoundingRect(
-    //     rotation: rotation,
-    //     unrotatedBox: newRect,
-    //   );
-    //
-    //   // Check if the new rectangle satisfies the constraints.
-    //   isBound = isRectConstrained(
-    //     newRect,
-    //     constraints,
-    //   );
-    //
-    //   // If the rectangle is still not properly constrained, fall back to minimum sizes.
-    //   if (!isBound) {
-    //     newRect = Box.fromHandle(
-    //       handle.anchor(initialRect),
-    //       handle,
-    //       handle.influencesHorizontal
-    //           ? constraints.minWidth
-    //           : constrainedSize.width,
-    //       handle.influencesVertical
-    //           ? constraints.minHeight
-    //           : constrainedSize.height,
-    //     );
-    //     // [ISSUE] Falling back to the unflipped handle and initialRect may ignore
-    //     // the rotation context, leading to inconsistencies.
-    //     newRect = repositionRotatedResizedBox(
-    //       newRect: newRect,
-    //       initialRect: initialRect,
-    //       rotation: rotation,
-    //     );
-    //     newBoundingRect = BoxTransformer.calculateBoundingRect(
-    //       rotation: rotation,
-    //       unrotatedBox: newRect,
-    //     );
-    //   }
-    // }
+    if (!constraints.isUnconstrained) {
+      // Clamp the current width and height to within allowed limits.
+      final Dimension constrainedSize = Dimension(
+        newRect.width.clamp(constraints.minWidth, constraints.maxWidth),
+        newRect.height.clamp(constraints.minHeight, constraints.maxHeight),
+      );
+    
+      // Calculate how much adjustment is needed to reach the constrained size.
+      final Dimension constrainedDelta = Dimension(
+        constrainedSize.width - newRect.width,
+        constrainedSize.height - newRect.height,
+      );
+    
+      // Recalculate the rectangle using the flipped handle's anchor.
+      newRect = Box.fromHandle(
+        flippedHandle.anchor(effectiveInitialRect),
+        flippedHandle,
+        newRect.width + constrainedDelta.width,
+        newRect.height + constrainedDelta.height,
+      );
+    
+      // Reposition again after applying constraints.
+      newRect = repositionRotatedResizedBox(
+        newRect: newRect,
+        initialRect: initialRect,
+        rotation: rotation,
+      );
+    
+      // Update the bounding rectangle to reflect the constrained, repositioned rect.
+      newBoundingRect = BoxTransformer.calculateBoundingRect(
+        rotation: rotation,
+        unrotatedBox: newRect,
+      );
+    
+      // Check if the new rectangle satisfies the constraints.
+      isBound = isRectConstrained(
+        newRect,
+        constraints,
+      );
+    
+      // If the rectangle is still not properly constrained, fall back to minimum sizes.
+      if (!isBound) {
+        newRect = Box.fromHandle(
+          handle.anchor(initialRect),
+          handle,
+          handle.influencesHorizontal
+              ? constraints.minWidth
+              : constrainedSize.width,
+          handle.influencesVertical
+              ? constraints.minHeight
+              : constrainedSize.height,
+        );
+        // [ISSUE] Falling back to the unflipped handle and initialRect may ignore
+        // the rotation context, leading to inconsistencies.
+        newRect = repositionRotatedResizedBox(
+          newRect: newRect,
+          initialRect: initialRect,
+          rotation: rotation,
+        );
+        newBoundingRect = BoxTransformer.calculateBoundingRect(
+          rotation: rotation,
+          unrotatedBox: newRect,
+        );
+      }
+    }
 
     final Box effectiveBindingRect = switch (bindingStrategy) {
       BindingStrategy.originalBox => effectiveInitialRect,
