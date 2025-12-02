@@ -774,7 +774,7 @@ class _TransformableBoxState extends State<TransformableBox> {
       content = GestureDetector(
         behavior: HitTestBehavior.translucent,
         supportedDevices: widget.supportedDragDevices,
-        onTap: onTap,
+        onTap: widget.onTap == null ? null : onTap,
         onPanStart: onDragPanStart,
         onPanUpdate: onDragPanUpdate,
         onPanEnd: onDragPanEnd,
