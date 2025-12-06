@@ -121,11 +121,6 @@ class DefaultSideHandle extends StatelessWidget {
     return Center(
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final constrainedSide = handle.isHorizontal
-              ? constraints.maxHeight
-              : constraints.maxWidth;
-          if (constrainedSide < length / 3) return const SizedBox.shrink();
-
           return Container(
             constraints: BoxConstraints(
               maxWidth: handle.isHorizontal ? thickness : length,
