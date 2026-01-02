@@ -272,6 +272,7 @@ class TransformableBoxController extends ChangeNotifier {
   UIMoveResult onDragUpdate(
     Offset localPosition, {
     bool notify = true,
+    bool applyTransform = true,
   }) {
     final UIMoveResult result = UIBoxTransform.move(
       initialRect: initialRect,
@@ -282,8 +283,10 @@ class TransformableBoxController extends ChangeNotifier {
       bindingStrategy: bindingStrategy,
     );
 
-    _rect = result.rect;
-    _boundingRect = result.boundingRect;
+    if (applyTransform) {
+      _rect = result.rect;
+      _boundingRect = result.boundingRect;
+    }
 
     if (notify) notifyListeners();
 
@@ -372,6 +375,7 @@ class TransformableBoxController extends ChangeNotifier {
     Offset localPosition,
     HandlePosition handle, {
     bool notify = true,
+    bool applyTransform = true,
     ValueGetter<ResizeMode>? resizeModeResolver,
   }) {
     // Calculate the new rect based on the initial rect, initial local position,
@@ -389,9 +393,11 @@ class TransformableBoxController extends ChangeNotifier {
       bindingStrategy: bindingStrategy,
     );
 
-    _rect = result.rect;
-    _flip = result.flip;
-    _boundingRect = result.boundingRect;
+    if (applyTransform) {
+      _rect = result.rect;
+      _flip = result.flip;
+      _boundingRect = result.boundingRect;
+    }
 
     if (notify) notifyListeners();
     return result;

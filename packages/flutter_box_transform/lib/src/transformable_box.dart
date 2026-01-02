@@ -273,6 +273,11 @@ class TransformableBox extends StatefulWidget {
   /// Whether to paint the handle's bounds for debugging purposes.
   final bool debugPaintHandleBounds;
 
+  /// Whether the controller should apply transformations internally.
+  /// When false, callbacks still fire but the controller's rect is not mutated.
+  /// This is useful when you want to handle transformations externally.
+  final bool applyTransformations;
+
   /// Creates a [TransformableBox] widget.
   const TransformableBox({
     super.key,
@@ -337,6 +342,7 @@ class TransformableBox extends StatefulWidget {
     this.onTerminalHeightReached,
     this.onTerminalSizeReached,
     this.debugPaintHandleBounds = false,
+    this.applyTransformations = true,
   })  : assert(
           (controller == null) ||
               ((rect == null) &&
@@ -539,6 +545,7 @@ class _TransformableBoxState extends State<TransformableBox> {
     final UIResizeResult result = controller.onResizeUpdate(
       event.localPosition,
       handle,
+      applyTransform: widget.applyTransformations,
     );
 
     widget.onChanged?.call(result, event);
@@ -730,6 +737,7 @@ class _TransformableBoxState extends State<TransformableBox> {
 
     final UIMoveResult result = controller.onDragUpdate(
       event.localPosition,
+      applyTransform: widget.applyTransformations,
     );
 
     widget.onChanged?.call(result, event);
